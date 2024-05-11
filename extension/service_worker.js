@@ -12,7 +12,7 @@ ws.addEventListener("open", () => {
   let current_url = 'EMPTY';
 
   const handle_navigation = (event, url) => {
-    if (!url.includes(current_url) && url.startsWith("https://www.youtube.com/watch?v")) {
+    if (!current_url.includes(url) && url.startsWith("https://www.youtube.com/watch?v")) {
       let saved_state;
 
       chrome.storage.sync.get(['savedState'], result => {
@@ -28,7 +28,7 @@ ws.addEventListener("open", () => {
     }
   }
 
-  chrome.webNavigation.onCompleted.addListener(({ url }) => handle_navigation("ONCOMPLETE", url), filter);
+  chrome.webNavigation.onCompleted.addListener(({ url }) => handle_navigation("ONCOMPLETED", url), filter);
 
   chrome.webNavigation.onHistoryStateUpdated.addListener(({ url }) => handle_navigation("ONHSU", url), filter);
 });
