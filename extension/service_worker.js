@@ -12,7 +12,7 @@ ws.addEventListener("open", () => {
   let current_url = 'EMPTY';
 
   chrome.webNavigation.onCompleted.addListener(({ url }) => {
-    if (!url.includes(current_url)) {
+    if (!url.includes(current_url) && url.startsWith("https://www.youtube.com/watch?v")) {
       console.log(`(ONCOMPLETE): changing current_url from ${current_url} to ${url}`);
       current_url = url;
 
@@ -22,7 +22,7 @@ ws.addEventListener("open", () => {
   }, filter);
 
   chrome.webNavigation.onHistoryStateUpdated.addListener(({ url }) => {
-    if (!url.includes(current_url)) {
+    if (!url.includes(current_url) && url.startsWith("https://www.youtube.com/watch?v")) {
       console.log(`(ONHSU): changing current_url from ${current_url} to ${url}`);
       current_url = url;
 
