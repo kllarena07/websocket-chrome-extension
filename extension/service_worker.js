@@ -11,25 +11,26 @@ ws.addEventListener("open", () => {
 
   let current_url = 'EMPTY';
 
-  chrome.webNavigation.onCompleted.addListener(({ url }) => {
+  const handle_navigation = (event, url) => {
     if (!url.includes(current_url) && url.startsWith("https://www.youtube.com/watch?v")) {
-      console.log(`(ONCOMPLETE): changing current_url from ${current_url} to ${url}`);
+      let saved_state;
+
+      chrome.storage.sync.get(['savedState'], result => {
+        if (result.savedState) saved_state = result.savedState;
+      });
+
+      console.log(`(${event}): changing current_url from ${current_url} to ${url}`);
+      console.log(`(${event}): current language is ${saved_state}`);
       current_url = url;
 
       ws.send(current_url);
-      console.log("(ONCOMPLETE): sending url to wss");
+      console.log(`(${event}): sending url to wss`);
     }
-  }, filter);
+  }
 
-  chrome.webNavigation.onHistoryStateUpdated.addListener(({ url }) => {
-    if (!url.includes(current_url) && url.startsWith("https://www.youtube.com/watch?v")) {
-      console.log(`(ONHSU): changing current_url from ${current_url} to ${url}`);
-      current_url = url;
+  chrome.webNavigation.onCompleted.addListener(({ url }) => handle_navigation("ONCOMPLETE", url), filter);
 
-      ws.send(current_url);
-      console.log("(ONHSU): sending url to wss");
-    }
-  }, filter);
+  chrome.webNavigation.onHistoryStateUpdated.addListener(({ url }) => handle_navigation("ONHSU", url), filter);
 });
 
 ws.addEventListener("close", () => ws.close());
