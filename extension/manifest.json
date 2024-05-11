@@ -4,6 +4,9 @@
   "description": "Using websockets in a Chrome Extension",
   "manifest_version": 3,
   "author": "kllarena07",
+  "action": {
+    "default_popup": "popup/index.html"
+  },
   "background": {
     "service_worker": "service_worker.js",
     "type": "module"
@@ -14,5 +17,5 @@
       "matches": ["https://www.youtube.com/watch?v=*"]
     }
   ],
-  "permissions": ["tabs", "webNavigation"]
+  "permissions": ["storage", "webNavigation"]
 }
