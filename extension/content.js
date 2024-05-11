@@ -12,4 +12,6 @@ ws.addEventListener("open", () => {
   observer.observe({ type: "resource", buffered: true });
 });
 
+ws.addEventListener("close", () => ws.close());
+
 ws.addEventListener("error", err => console.log(err));
