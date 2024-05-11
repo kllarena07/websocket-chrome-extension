@@ -28,4 +28,5 @@ async def main():
     await server.wait_closed()
 
 if __name__ == "__main__":
+    print("Listening at ws://127.0.0.1:8080")
     asyncio.run(main())
