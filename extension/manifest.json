@@ -11,8 +11,7 @@
   "content_scripts": [
     {
       "js": ["content.js"],
-      "matches": ["https://www.youtube.com/watch?v=*"],
-      "world": "MAIN"
+      "matches": ["https://www.youtube.com/watch?v=*"]
     }
   ],
   "permissions": ["tabs", "webNavigation"]
