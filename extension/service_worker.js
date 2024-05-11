@@ -1,23 +1,37 @@
-const filter = {
-  url: [
-    {
-      urlMatches: 'https://www.youtube.com',
-    },
-  ],
-};
+const ws = new WebSocket("ws://127.0.0.1:8080");
 
-let current_url = 'EMPTY';
+ws.addEventListener("open", () => {
+  const filter = {
+    url: [
+      {
+        urlMatches: 'https://www.youtube.com',
+      },
+    ],
+  };
 
-chrome.webNavigation.onCompleted.addListener(({ url }) => {
-  if (!url.includes(current_url)) {
-    console.log(`(ONCOMPLETE): changing current_url from ${current_url} to ${url}`);
-    current_url = url;
-  }
-}, filter);
+  let current_url = 'EMPTY';
 
-chrome.webNavigation.onHistoryStateUpdated.addListener(({ url }) => {
-  if (!url.includes(current_url)) {
-    console.log(`(ONHSU): changing current_url from ${current_url} to ${url}`);
-    current_url = url;
-  }
-}, filter);
+  chrome.webNavigation.onCompleted.addListener(({ url }) => {
+    if (!url.includes(current_url)) {
+      console.log(`(ONCOMPLETE): changing current_url from ${current_url} to ${url}`);
+      current_url = url;
+
+      ws.send(current_url);
+      console.log("(ONCOMPLETE): sending url to wss");
+    }
+  }, filter);
+
+  chrome.webNavigation.onHistoryStateUpdated.addListener(({ url }) => {
+    if (!url.includes(current_url)) {
+      console.log(`(ONHSU): changing current_url from ${current_url} to ${url}`);
+      current_url = url;
+
+      ws.send(current_url);
+      console.log("(ONHSU): sending url to wss");
+    }
+  }, filter);
+});
+
+ws.addEventListener("close", () => ws.close());
+
+ws.addEventListener("error", err => console.log(err));
