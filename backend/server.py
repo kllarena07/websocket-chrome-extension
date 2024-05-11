@@ -4,7 +4,7 @@ import websockets
 
 async def echo(websocket, path):
     async for message in websocket:
-        print(f"Received message: {message}")
+        print("Transcribing", message)
 
 async def main():
     server = await websockets.serve(echo, "127.0.0.1", 8080)
@@ -24,8 +24,8 @@ async def main():
           lambda: asyncio.create_task(shutdown(signame, loop))
         )
 
-    # This will keep the server running indefinitely until interrupted
-    await asyncio.Future()
+    # Wait for the server to complete (keep the event loop running)
+    await server.wait_closed()
 
 if __name__ == "__main__":
     asyncio.run(main())
