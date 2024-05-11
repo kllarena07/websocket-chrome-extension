@@ -4,11 +4,15 @@
   "description": "Using websockets in a Chrome Extension",
   "manifest_version": 3,
   "author": "kllarena07",
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "js": ["content.js"],
       "matches": ["https://www.youtube.com/*"]
     }
   ],
-  "permissions": ["tabs"]
+  "permissions": ["tabs", "webNavigation"]
 }
