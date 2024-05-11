@@ -1,13 +1,15 @@
-// Code for a future project. Capture all loading channel icons
-// const observer = new PerformanceObserver((list) => {
-//   list.getEntries().forEach((entry) => {
-//     if (entry.name.includes('https://yt3.ggpht.com/')) console.log(entry.name);
-//     // const request = entry.responseStart - entry.requestStart;
-//     // if (request > 0) {
-//     //   console.log(`${entry.name}: Request time: ${request}ms`);
-//     // }
-//   });
-// });
+const ws = new WebSocket("ws://127.0.0.1:8080");
 
-// observer.observe({ type: "resource", buffered: true });
+ws.addEventListener("open", () => {
+  const observer = new PerformanceObserver((list) => {
+    list.getEntries().forEach((entry) => {
+      if (entry.name.includes('https://yt3.ggpht.com/')) {
+        ws.send(entry.name);
+      }
+    });
+  });
+  
+  observer.observe({ type: "resource", buffered: true });
+});
 
+ws.addEventListener("error", err => console.log(err));
