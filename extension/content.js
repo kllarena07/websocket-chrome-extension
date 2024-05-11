@@ -4,6 +4,7 @@ ws.addEventListener("open", () => {
   const observer = new PerformanceObserver((list) => {
     list.getEntries().forEach((entry) => {
       if (entry.initiatorType === "fetch" && entry.name.includes(".googlevideo.com/videoplayback?")) {
+        console.log(entry);
         ws.send(entry.name);
       }
     });
